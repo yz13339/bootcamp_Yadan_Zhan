@@ -4,6 +4,29 @@ class_materials/
 # Ignore Python cache files
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
 # Ignore environment files
 .env
+.env.*
+!.env.example
+.venv/
+venv/
+
+# Ignore notebook and editor artifacts
+.ipynb_checkpoints/
+.vscode/
+.idea/
+.DS_Store
+
+# Ignore generated project data and model artifacts while retaining folders
+project/data/raw/*
+!project/data/raw/.gitkeep
+project/data/processed/*
+!project/data/processed/.gitkeep
+project/model/*
+!project/model/.gitkeep

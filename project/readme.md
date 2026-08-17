@@ -97,4 +97,47 @@ The initial scope will not include:
 | Establish project boundaries               | Problem Framing and Scoping | Scope, assumptions, constraints, and risks |
 | Create a persistent workspace              | Problem Framing and Scoping | GitHub repository and project structure    |
 
+## Project Structure
 
+```text
+project/
+├── data/
+│   ├── raw/          # Original, unmodified source data (not committed)
+│   └── processed/    # Cleaned and analysis-ready data (not committed)
+├── notebooks/        # Exploration and analysis notebooks
+├── src/              # Reusable data and modeling code
+├── docs/             # Project documentation
+├── reports/          # Final figures, tables, and written reports
+├── model/            # Saved model artifacts (not committed)
+├── README.md         # Project purpose, scope, and instructions
+└── requirements.txt  # Reproducible Python dependencies
+```
+
+Empty directories contain `.gitkeep` files so that the project structure is
+preserved in Git. Generated data and model artifacts are excluded to avoid
+committing large or reproducible files.
+
+## Environment Setup
+
+Python 3.11 or newer is required; this setup has been verified with Python
+3.14.3. From the repository root, create and activate an isolated environment,
+then install the project dependencies:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r project/requirements.txt
+```
+
+To make the environment available in JupyterLab:
+
+```bash
+python -m ipykernel install --user --name market-stress \
+  --display-name "Python (Market Stress)"
+jupyter lab
+```
+
+Store API keys and other secrets in a local `.env` file. The `.env` file,
+virtual environment, raw/processed data, and generated model files are ignored
+by Git.
