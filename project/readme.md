@@ -141,3 +141,19 @@ jupyter lab
 Store API keys and other secrets in a local `.env` file. The `.env` file,
 virtual environment, raw/processed data, and generated model files are ignored
 by Git.
+
+
+## Data Storage
+
+Project data are organized into two folders:
+
+- `data/raw/` stores immutable data downloaded directly from the source.
+- `data/processed/` stores datasets produced through reproducible
+  cleaning and transformation steps.
+
+The raw market data are stored in CSV format because the dataset is
+small and CSV is widely readable. Data are loaded using pandas, with
+folder paths configured through environment variables in `.env`.
+
+The `.env` file is excluded from version control, while `.env.example`
+documents the required path variables.
