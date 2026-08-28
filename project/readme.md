@@ -157,3 +157,56 @@ folder paths configured through environment variables in `.env`.
 
 The `.env` file is excluded from version control, while `.env.example`
 documents the required path variables.
+
+## Run the Complete Project
+
+From the repository root after installing `project/requirements.txt`:
+
+```bash
+python -m project.src.run_step
+jupyter nbconvert --to notebook --execute --inplace project/notebooks/project_pipeline.ipynb
+python project/app.py
+```
+
+The CLI feature step reads `project/data/processed/multi_asset_market_data_processed.csv`, deterministically writes `project/data/processed/market_features.csv`, and logs its checkpoint. The notebook performs outlier analysis, EDA, feature engineering, time-aware modeling, bootstrap/scenario evaluation, saves `project/model/market_stress_model.pkl`, and produces the stakeholder report.
+
+## Prediction API
+
+Check service health:
+
+```bash
+curl http://127.0.0.1:5051/health
+```
+
+POST the seven named, already-computed features:
+
+```bash
+curl -X POST http://127.0.0.1:5051/predict \
+  -H 'Content-Type: application/json' \
+  -d '{"features":{"spy_ret_lag1":-0.01,"vix_change_lag1":0.08,"spy_vol_20":0.012,"spy_drawdown":-0.04,"vix_z_60":1.2,"tlt_ret_lag1":0.002,"gld_ret_lag1":0.003}}'
+```
+
+Invalid or incomplete input returns a JSON error and HTTP 400. The API supports analyst review only and is not an automated trading system.
+
+## Stakeholder Handoff Summary
+
+- Purpose: flag potential next-day high-stress conditions for weekly portfolio risk review.
+- Finding: cross-asset features provide an interpretable baseline, but rare-event recall and uncertainty limit reliance.
+- Recommendation: use as a review trigger with human approval; do not automate allocation or trading.
+- Assumptions: historical regimes remain informative, source data arrive correctly, and label thresholds reflect stakeholder costs.
+- Risks: regime drift, class imbalance, delayed data, false negatives, and proxy mismatch with the actual portfolio.
+- Deliverables: `reports/stakeholder_report.md`, pipeline notebook, saved model, API, monitoring and handoff plans.
+- Next steps: longer walk-forward tests, time-block bootstrap, probability calibration, portfolio-cost analysis, and live monitoring.
+
+## Lifecycle Map
+
+| Stages | Location |
+|---|---|
+| 1–6 framing, setup, acquisition, storage, cleaning | `README.md`, `notebooks/`, `src/cleaning.py`, `data/` |
+| 7–9 outliers, EDA, features | `src/outliers.py`, `src/eda.py`, `src/features.py`, `docs/outliers.md` |
+| 10–11 modeling and evaluation | `src/modeling.py`, `src/evaluation.py`, `notebooks/project_pipeline.ipynb` |
+| 12–13 delivery and productization | `reports/`, `model/`, `app.py` |
+| 14–15 monitoring and orchestration | `docs/monitoring_plan.md`, `docs/handoff_plan.md`, `docs/orchestration_plan.md`, `src/run_step.py` |
+| 16 lifecycle review | `docs/lifecycle_framework_guide.md`, `docs/project_summary.md` |
+
+See the framework guide for the decision made at every stage.

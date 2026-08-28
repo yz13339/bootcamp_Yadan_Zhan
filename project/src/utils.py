@@ -1,4 +1,7 @@
 
+import numpy as np
+
+
 def parse_date_column(df, column_name="Date"):
     """
     Convert a DataFrame column to datetime format.

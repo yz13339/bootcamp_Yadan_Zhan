@@ -30,3 +30,4 @@ project/data/processed/*
 !project/data/processed/.gitkeep
 project/model/*
 !project/model/.gitkeep
+!project/model/market_stress_model.pkl
